@@ -22,8 +22,14 @@ class PromptData {
         // Add prompt to the list of prompts
         list.append(item)
         
-        list.append(Prompt(text: "Do your apps need to handle sensitive data and require high availability?", optionsArray: ["Low", "Moderate"], optionsSubtext: ["Applications do not collect or store sensitive data. Not required to be highly available.", "Some sensitive data is used or collected. Apps require high availability."]))
+//        list.append(Prompt(text: "Do your apps handle sensitive data and require high availability?", optionsArray: ["Low", "Moderate"], optionsSubtext: ["Applications do not collect or store sensitive data. Not required to be highly available.", "Some sensitive data is used or collected. Apps require high availability."]))
         
+        list.append(Prompt(text: "FISMA Low or FISMA Moderate?", optionsArray: ["Low", "Moderate"], optionsSubtext: ["Applications do not collect or store sensitive data. Not required to be highly available.", "Some sensitive data is used or collected. Apps require high availability."]))
+        
+        list.append(Prompt(text: "How many systems will you need?", optionsArray: ["1 system", "2 systems", "3 systems", "5 systems", "10 systems", "15 systems"], optionsSubtext: []))
+        
+        list.append(Prompt(text: "How much memory will your apps require for all systems?", optionsArray: ["128 MB", "512 MB", "1 GB", "2 GB", "3 GB", "5 GB"], optionsSubtext: []))
+
     }
     
 }
