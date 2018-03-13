@@ -10,13 +10,26 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    // initialize variables
+    var button : UIButton?
+    var buttons = [UIButton?]()
+    var label : UILabel?
+
     var allPrompts = PromptData()
     var promptLabel = UITextView.init()
     var bgContainer = UIView.init()
     var buttonBlock : UIButton?
-    var counter = 3
-    
+    var counter = 0
+    var currentIndex = 0
+    var pickedAnswer : String = ""
     let buttonHeight = 50
+    
+    // vars for estimator logic
+    var prodVar :  Bool = false
+    var fisma : String = ""
+    var numberOfSystems : Int = 0
+    var memoryQuota : Int = 0
+    
 
     
     override func viewDidLoad() {
@@ -30,6 +43,54 @@ class ViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    @objc func answerPressed(sender: UIButton){
+        
+        pickedAnswer = (sender.titleLabel?.text)!
+        currentIndex = counter
+        
+        // prod
+        if counter == 0 && pickedAnswer == String(describing: allPrompts.list[counter].choicesArray[0]) { // "Yes"
+            prodVar = true
+            counter += 1
+            print(prodVar)
+        } else if counter == 0 && pickedAnswer == String(describing: allPrompts.list[counter].choicesArray[1]) { // "No"
+            counter = 3
+            prodVar = false
+        } else if counter == 1 {
+            fisma = pickedAnswer
+            counter += 1
+            print("FISMA level: \(fisma)")
+        } else if counter == 2 {
+            numberOfSystems = Int(pickedAnswer)!
+            counter += 1
+            print("No. of systems: \(numberOfSystems)")
+        } else if counter == 3 {
+            // ["128 MB", "512 MB", "1 GB", "2 GB", "3 GB", "5 GB"]
+            switch pickedAnswer {
+            case "128 MB":
+                memoryQuota = 128
+            case "512 MB":
+                memoryQuota = 512
+            case "1 GB":
+                memoryQuota = 1
+            case "2 GB":
+                memoryQuota = 2
+            case "3 GB":
+                memoryQuota = 3
+            case "5 GB":
+                memoryQuota = 5
+            default:
+                print("memory quota default")
+            }
+            print ("picked answer: \(pickedAnswer)")
+            print ("memory quota: \(memoryQuota)")
+            // counter += 1
+        }
+        
+        nextPrompt()
+        
     }
 
     func setUpBGContainer() {
@@ -59,11 +120,13 @@ class ViewController: UIViewController {
         self.view.addSubview(promptLabel)
         
     }
+    
     func setUpButtonBlock(buttonName : String, yPos : Int) {
         
         // init
         buttonBlock = UIButton(frame: CGRect(x: (self.view.frame.size.width/2) - (self.view.frame.size.width/2 - 20), y: CGFloat(yPos), width: self.view.frame.size.width - 40, height: CGFloat(buttonHeight)))
         
+
         // title hex #425772
         buttonBlock?.setTitle(buttonName, for: .normal)
 //        buttonBlock?.setTitleColor(UIColor.red, for: .normal)
@@ -79,7 +142,7 @@ class ViewController: UIViewController {
         //        button?.setTitleColor(UIColor(red:0.01, green:0.42, blue:0.92, alpha:1.0), for: .normal)
         
         // target
-//        buttonBlock?.addTarget(self, action: #selector(answerPressed(sender:)), for: UIControlEvents.touchUpInside)
+        buttonBlock?.addTarget(self, action: #selector(answerPressed(sender:)), for: UIControlEvents.touchUpInside)
         
         // background color #e6e6e6
 //         buttonBlock?.backgroundColor = UIColor.lightGray
@@ -114,9 +177,13 @@ class ViewController: UIViewController {
         buttonBlock?.layer.addSublayer(border)
         buttonBlock?.layer.masksToBounds = true
         
+        // assign tag
+//        buttonIndex += 1
+//        buttonBlock?.tag = buttonIndex
         
         // add to view
         self.view.addSubview(buttonBlock!)
+        self.buttons.append(buttonBlock!)
         
     }
     
@@ -126,10 +193,39 @@ class ViewController: UIViewController {
         let numOfArrayItems = allPrompts.list[counter].choicesArray.count
         
         for optionsItem in 0...numOfArrayItems - 1 {
-            setUpButtonBlock(buttonName:(allPrompts.list[counter].choicesArray[optionsItem] as! String), yPos: Int(self.view.frame.size.height) - (buttonHeight * (numOfArrayItems - optionsItem)) - 50)
-            print(allPrompts.list[counter].choicesArray[optionsItem])
-            print(allPrompts.list[counter].choicesSubtext?[optionsItem] ?? "")
+            // stacked y-dist from the top
+            setUpButtonBlock(buttonName:(allPrompts.list[counter].choicesArray[optionsItem] as! String), yPos: (buttonHeight * optionsItem + 160))
+            
+            // stacked from the bottom
+//            setUpButtonBlock(buttonName:(allPrompts.list[counter].choicesArray[optionsItem] as! String), yPos: Int(self.view.frame.size.height) - (buttonHeight * (numOfArrayItems - optionsItem)) - 50)
+            
+//            print(allPrompts.list[counter].choicesArray[optionsItem])
+            
+//            print(allPrompts.list[counter].choicesSubtext?[optionsItem] ?? "")
         }
+    }
+
+    func removeButtonBlock() {
+        
+        for button in self.buttons {
+            button?.removeFromSuperview()
+        }
+    }
+    
+    func nextPrompt() {
+        
+        promptLabel.text = allPrompts.list[counter].promptText
+        removeButtonBlock()
+        setUpPromptOptions()
+        
+//        if counter < allPrompts.list.count {
+//            promptLabel.text = allPrompts.list[counter].promptText
+//            print("next question: \(allPrompts.list[counter].promptText)")
+//        } else {
+//            print ("end of prompts")
+//            counter = 0
+//        }
+        
     }
     
 }
