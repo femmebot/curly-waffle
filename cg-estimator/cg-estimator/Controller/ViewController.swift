@@ -38,7 +38,7 @@ class ViewController: UIViewController {
     let prototypingFee = 1250.00
     let fismaLowFee = 1666.67
     let fismaModerateFee = 7500.00
-    let memoryUsage = 100
+    let memoryUsageCost = 105.00
 
     
     override func viewDidLoad() {
@@ -288,16 +288,16 @@ class ViewController: UIViewController {
     
     func estimateCost() {
         
-        print ("Estimated monthly cost for \(Int(numberOfSystems)) \(recPackage) system(s) with \(memoryQuotaText) memory is \((accessFee * numberOfSystems) + (memoryQuota * 100) )")
+        print ("Estimated monthly cost for \(Int(numberOfSystems)) \(recPackage) system(s) with \(memoryQuotaText) memory is \((accessFee * numberOfSystems) + (memoryQuota * memoryUsageCost) )")
         
         // prices
 //        var recPackage : String = ""
 //        var accessFee : NSDecimalNumber = 0
 //        var estimatedCost : NSDecimalNumber = 0
-//        let prototypingFee : NSDecimalNumber = 1250
-//        let fismaLowFee : NSDecimalNumber = 1667
-//        let fismaModerateFee : NSDecimalNumber = 7500
-//        let memoryUsage : NSDecimalNumber = 100
+//        let prototypingFee : NSDecimalNumber = 1250.00
+//        let fismaLowFee : NSDecimalNumber = 1666.67
+//        let fismaModerateFee : NSDecimalNumber = 7500.00
+//        let memoryUsageCost : NSDecimalNumber = 105.00
         
         
         
