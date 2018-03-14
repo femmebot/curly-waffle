@@ -29,7 +29,16 @@ class ViewController: UIViewController {
     var fisma : String = ""
     var numberOfSystems : Int = 0
     var memoryQuota : Int = 0
+    var memoryQuotaText : String = ""
     
+    // prices
+    var recPackage : String = ""
+    var accessFee : Int = 0
+    var estimatedCost : Int = 0
+    let prototypingFee : Int = 1250
+    let fismaLowFee : Int = 1667
+    let fismaModerateFee : Int = 7500
+    let memoryUsage : Int = 100
 
     
     override func viewDidLoad() {
@@ -47,49 +56,13 @@ class ViewController: UIViewController {
     
     @objc func answerPressed(sender: UIButton){
         
+        sender.setTitleColor(UIColor.red, for: .normal)
+
         pickedAnswer = (sender.titleLabel?.text)!
         currentIndex = counter
+        selectionHandler()
         
-        // prod
-        if counter == 0 && pickedAnswer == String(describing: allPrompts.list[counter].choicesArray[0]) { // "Yes"
-            prodVar = true
-            counter += 1
-            print(prodVar)
-        } else if counter == 0 && pickedAnswer == String(describing: allPrompts.list[counter].choicesArray[1]) { // "No"
-            counter = 3
-            prodVar = false
-        } else if counter == 1 {
-            fisma = pickedAnswer
-            counter += 1
-            print("FISMA level: \(fisma)")
-        } else if counter == 2 {
-            numberOfSystems = Int(pickedAnswer)!
-            counter += 1
-            print("No. of systems: \(numberOfSystems)")
-        } else if counter == 3 {
-            // ["128 MB", "512 MB", "1 GB", "2 GB", "3 GB", "5 GB"]
-            switch pickedAnswer {
-            case "128 MB":
-                memoryQuota = 128
-            case "512 MB":
-                memoryQuota = 512
-            case "1 GB":
-                memoryQuota = 1
-            case "2 GB":
-                memoryQuota = 2
-            case "3 GB":
-                memoryQuota = 3
-            case "5 GB":
-                memoryQuota = 5
-            default:
-                print("memory quota default")
-            }
-            print ("picked answer: \(pickedAnswer)")
-            print ("memory quota: \(memoryQuota)")
-            // counter += 1
-        }
-        
-        nextPrompt()
+        nextScreen()
         
     }
 
@@ -121,10 +94,41 @@ class ViewController: UIViewController {
         
     }
     
+    func setUpButton(buttonName : String){
+        
+        button = UIButton(frame: CGRect(x: (self.view.frame.size.width/2) - (self.view.frame.size.width/2 - 20), y: self.view.frame.size.height - 80, width: self.view.frame.size.width - 40, height: 40))
+        
+        // title hex #425772
+        button?.setTitle(buttonName, for: .normal)
+        
+        //        buttonBlock?.setTitleColor(UIColor.red, for: .normal)
+        button?.setTitleColor(UIColor(
+            red: 0x42/255,
+            green: 0x57/255,
+            blue: 0x72/255,
+            alpha: 1.0), for: .normal)
+        button?.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        
+        // target
+        button?.addTarget(self, action: #selector(answerPressed(sender:)), for: UIControlEvents.touchUpInside)
+        
+        // background color #00aeef
+        button?.backgroundColor = UIColor(
+            red: 0x00/255,
+            green: 0xae/255,
+            blue: 0xef/255,
+            alpha: 1.0)
+        button?.layer.cornerRadius = 20
+        
+        // add to view
+        self.view.addSubview(button!)
+        
+    }
+    
     func setUpButtonBlock(buttonName : String, yPos : Int) {
         
         // init
-        buttonBlock = UIButton(frame: CGRect(x: (self.view.frame.size.width/2) - (self.view.frame.size.width/2 - 20), y: CGFloat(yPos), width: self.view.frame.size.width - 40, height: CGFloat(buttonHeight)))
+        buttonBlock = UIButton(frame: CGRect(x: (self.view.frame.size.width/2) - (self.view.frame.size.width/2 - 20), y: CGFloat(yPos), width: self.view.frame.size.width - 40, height: CGFloat(40)))
         
 
         // title hex #425772
@@ -143,14 +147,6 @@ class ViewController: UIViewController {
         
         // target
         buttonBlock?.addTarget(self, action: #selector(answerPressed(sender:)), for: UIControlEvents.touchUpInside)
-        
-        // background color #e6e6e6
-//         buttonBlock?.backgroundColor = UIColor.lightGray
-//            buttonBlock?.backgroundColor = UIColor(
-//                red: 0xe6/255,
-//                green: 0xe6/255,
-//                blue: 0xe6/255,
-//                alpha: 1.0)
         
         // border #ff5235
 //        buttonBlock?.layer.borderWidth = 1
@@ -194,7 +190,7 @@ class ViewController: UIViewController {
         
         for optionsItem in 0...numOfArrayItems - 1 {
             // stacked y-dist from the top
-            setUpButtonBlock(buttonName:(allPrompts.list[counter].choicesArray[optionsItem] as! String), yPos: (buttonHeight * optionsItem + 160))
+            setUpButtonBlock(buttonName:(allPrompts.list[counter].choicesArray[optionsItem] as! String), yPos: (buttonHeight * optionsItem + 190))
             
             // stacked from the bottom
 //            setUpButtonBlock(buttonName:(allPrompts.list[counter].choicesArray[optionsItem] as! String), yPos: Int(self.view.frame.size.height) - (buttonHeight * (numOfArrayItems - optionsItem)) - 50)
@@ -212,21 +208,101 @@ class ViewController: UIViewController {
         }
     }
     
-    func nextPrompt() {
+    func nextScreen() {
         
-        promptLabel.text = allPrompts.list[counter].promptText
-        removeButtonBlock()
-        setUpPromptOptions()
         
-//        if counter < allPrompts.list.count {
-//            promptLabel.text = allPrompts.list[counter].promptText
-//            print("next question: \(allPrompts.list[counter].promptText)")
-//        } else {
-//            print ("end of prompts")
-//            counter = 0
-//        }
+        if counter <= 3 {
+            removeButtonBlock()
+            promptLabel.text = allPrompts.list[counter].promptText
+            setUpPromptOptions()
+        } else if counter == 4 {
+            removeButtonBlock()
+            displayPackageScreen()
+        } else if counter == 5 {
+            estimateCost()
+        }
+
         
     }
+    
+    func selectionHandler() {
+        
+        if counter == 0 && pickedAnswer == "Yes" {
+            prodVar = true
+            counter += 1
+            // print(prodVar)
+        } else if counter == 0 && pickedAnswer == "No" {
+            counter = 3
+            prodVar = false
+        } else if counter == 1 {
+            fisma = pickedAnswer
+            counter += 1
+            // print("FISMA level: \(fisma)")
+        } else if counter == 2 {
+            numberOfSystems = Int(pickedAnswer)!
+            counter += 1
+            // print("No. of systems: \(numberOfSystems)")
+        } else if counter == 3 {
+            // ["128 MB", "512 MB", "1 GB", "2 GB", "3 GB", "5 GB"]
+            memoryQuotaText = pickedAnswer
+            switch pickedAnswer {
+            case "128 MB":
+                memoryQuota = Int(0.25)
+            case "512 MB":
+                memoryQuota = Int(0.5)
+            case "1 GB":
+                memoryQuota = 1
+            case "2 GB":
+                memoryQuota = 2
+            case "3 GB":
+                memoryQuota = 3
+            case "5 GB":
+                memoryQuota = 5
+            default:
+                print("memory quota default")
+            }
+            // print("Quota: \(memoryQuota)")
+             counter = 4
+        }
+        
+    }
+    
+    func displayPackageScreen() {
+        
+        if prodVar == false {
+            recPackage = "Prototyping"
+            accessFee = prototypingFee
+        } else if prodVar == true && fisma == "Low" {
+            recPackage = "FISMA Low"
+            accessFee = fismaLowFee
+        } else if prodVar == true && fisma == "Moderate" {
+            recPackage = "FISMA Moderate"
+            accessFee = fismaModerateFee
+        }
+
+        promptLabel.text = "Great! A \(recPackage) package is the best fit based on your needs."
+        setUpButton(buttonName: "Show estimate")
+        counter = 5
+        
+    }
+    
+    func estimateCost() {
+        
+        print ("Estimated monthly cost for \(numberOfSystems) \(recPackage) system(s) with \(memoryQuotaText) memory is \(accessFee * numberOfSystems + (memoryQuota * 100)) or \((accessFee * numberOfSystems + (memoryQuota * 100)) * 12) for one year")
+        
+        // prices
+//        var recPackage : String = ""
+//        var accessFee : NSDecimalNumber = 0
+//        var estimatedCost : NSDecimalNumber = 0
+//        let prototypingFee : NSDecimalNumber = 1250
+//        let fismaLowFee : NSDecimalNumber = 1667
+//        let fismaModerateFee : NSDecimalNumber = 7500
+//        let memoryUsage : NSDecimalNumber = 100
+        
+        
+        
+    }
+    
     
 }
 

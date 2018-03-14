@@ -28,7 +28,7 @@ class PromptData {
         
         list.append(Prompt(text: "How many systems will you need?", optionsArray: ["1", "2", "3", "5", "10", "15"], optionsSubtext: []))
         
-        list.append(Prompt(text: "How much memory will your apps require for all systems?", optionsArray: ["128 MB", "512 MB", "1 GB", "2 GB", "3 GB", "5 GB"], optionsSubtext: []))
+        list.append(Prompt(text: "How much memory will your apps require for all systems combined?", optionsArray: ["128 MB", "512 MB", "1 GB", "2 GB", "3 GB", "5 GB"], optionsSubtext: []))
 
     }
     
