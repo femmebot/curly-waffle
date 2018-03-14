@@ -27,18 +27,18 @@ class ViewController: UIViewController {
     // vars for estimator logic
     var prodVar :  Bool = false
     var fisma : String = ""
-    var numberOfSystems : Int = 0
-    var memoryQuota : Int = 0
+    var numberOfSystems : Double = 0
+    var memoryQuota : Double = 0
     var memoryQuotaText : String = ""
     
     // prices
     var recPackage : String = ""
-    var accessFee : Int = 0
-    var estimatedCost : Int = 0
-    let prototypingFee : Int = 1250
-    let fismaLowFee : Int = 1667
-    let fismaModerateFee : Int = 7500
-    let memoryUsage : Int = 100
+    var accessFee : Double = 0.0
+    var estimatedCost : Double = 0.0
+    let prototypingFee = 1250.00
+    let fismaLowFee = 1666.67
+    let fismaModerateFee = 7500.00
+    let memoryUsage = 100
 
     
     override func viewDidLoad() {
@@ -239,7 +239,7 @@ class ViewController: UIViewController {
             counter += 1
             // print("FISMA level: \(fisma)")
         } else if counter == 2 {
-            numberOfSystems = Int(pickedAnswer)!
+            numberOfSystems = Double(pickedAnswer)!
             counter += 1
             // print("No. of systems: \(numberOfSystems)")
         } else if counter == 3 {
@@ -247,9 +247,9 @@ class ViewController: UIViewController {
             memoryQuotaText = pickedAnswer
             switch pickedAnswer {
             case "128 MB":
-                memoryQuota = Int(0.25)
+                memoryQuota = 0.25
             case "512 MB":
-                memoryQuota = Int(0.5)
+                memoryQuota = 0.5
             case "1 GB":
                 memoryQuota = 1
             case "2 GB":
@@ -288,7 +288,7 @@ class ViewController: UIViewController {
     
     func estimateCost() {
         
-        print ("Estimated monthly cost for \(numberOfSystems) \(recPackage) system(s) with \(memoryQuotaText) memory is \(accessFee * numberOfSystems + (memoryQuota * 100)) or \((accessFee * numberOfSystems + (memoryQuota * 100)) * 12) for one year")
+        print ("Estimated monthly cost for \(Int(numberOfSystems)) \(recPackage) system(s) with \(memoryQuotaText) memory is \((accessFee * numberOfSystems) + (memoryQuota * 100) )")
         
         // prices
 //        var recPackage : String = ""
