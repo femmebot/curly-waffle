@@ -352,26 +352,26 @@ class ViewController: UIViewController {
         
         // set up labels
         setUpEstimatorLabel(labelName: "Package", xPos: 20, yPos: 100)
-        setUpEstimatorLabel(labelName: "Quantity", xPos: 20, yPos: 200)
-        setUpEstimatorLabel(labelName: "Add memory usage quota \n$105 / GB per month", xPos: 20, yPos: 280)
-        setUpEstimatorLabel(labelName: "Total", xPos: 20, yPos: 420)
+        setUpEstimatorLabel(labelName: "Quantity", xPos: 20, yPos: 180)
+        setUpEstimatorLabel(labelName: "Add memory usage quota \n$105 / GB per month", xPos: 20, yPos: 270)
+        setUpEstimatorLabel(labelName: "Total", xPos: 20, yPos: 390)
         
         setUpEstimateResults(labelName: recPackage, xPos: 20, yPos: 112)
-        setUpEstimateResults(labelName: String(numberOfSystems), xPos: 20, yPos: 212)
+        setUpEstimateResults(labelName: String(numberOfSystems), xPos: 20, yPos: 192)
         setUpEstimateResults(labelName: String(memoryQuotaText), xPos: 20, yPos: 292)
         
         if numberOfSystems < 5 {
             setUpEstimatorLabel(labelName: "Cost/month", xPos: 250, yPos: 100)
-            setUpEstimateResults(labelName: String(accessFee), xPos: 250, yPos: 112)
+            setUpEstimateResults(labelName: ("$\(String(accessFee))"), xPos: 250, yPos: 112)
         } else {
-            setUpEstimatorLabel(labelName: "Discounted bulk price", xPos: 250, yPos: 200)
-            setUpEstimateResults(labelName: String(accessFee), xPos: 250, yPos: 212)
+            setUpEstimatorLabel(labelName: "Discounted bulk price", xPos: 250, yPos: 180)
+            setUpEstimateResults(labelName: ("$\(String(accessFee))"), xPos: 250, yPos: 192)
         }
 
-        setUpEstimateResults(labelName: "\(recPackage),\n\(numberOfSystems) systems,\n\(memoryQuotaText) memory quota", xPos: 20, yPos: 432)
+        setUpEstimateResults(labelName: "\(recPackage),\n\(numberOfSystems) systems,\n\(memoryQuotaText) RAM", xPos: 20, yPos: 432)
         
         estimateCost()
-        setUpEstimateResults(labelName: String(estimatedCost), xPos: 250, yPos: 432)
+        setUpEstimateResults(labelName: ("$\(String(estimatedCost))"), xPos: 250, yPos: 412)
         
         
     }
