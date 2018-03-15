@@ -39,7 +39,12 @@ class ViewController: UIViewController {
     let fismaLowFee = 1666.67
     let fismaModerateFee = 7500.00
     let memoryUsageCost = 105.00
-
+    let bundle5FismaLow = 7500.00
+    let bundle10FismaLow = 14166.67
+    let bundle15FismaLow = 20000.00
+    let bundle5FismaModerate = 33750.00
+    let bundle10FismaModerate = 63750.00
+    let bundle15FismaModerate = 90000.00
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,6 +52,7 @@ class ViewController: UIViewController {
         setUpBGContainer()
         setUpPromptLabel()
         setUpPromptOptions()
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -67,7 +73,8 @@ class ViewController: UIViewController {
     }
 
     func setUpBGContainer() {
-        bgContainer.frame = CGRect(x:0,y:160,width:self.view.frame.size.width,height: self.view.frame.size.height - 160)
+        
+        bgContainer.frame = CGRect(x:0, y:160, width:self.view.frame.size.width, height: self.view.frame.size.height - 160)
         // #f1f6fc
         bgContainer.backgroundColor = UIColor(
             red: 0xf1/255,
@@ -75,6 +82,7 @@ class ViewController: UIViewController {
             blue: 0xfc/255,
             alpha: 1.0)
         self.view.addSubview(bgContainer)
+        
     }
     
     func setUpPromptLabel() {
@@ -103,9 +111,9 @@ class ViewController: UIViewController {
         
         //        buttonBlock?.setTitleColor(UIColor.red, for: .normal)
         button?.setTitleColor(UIColor(
-            red: 0x42/255,
-            green: 0x57/255,
-            blue: 0x72/255,
+            red: 0xff/255,
+            green: 0xff/255,
+            blue: 0xff/255,
             alpha: 1.0), for: .normal)
         button?.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         
@@ -219,6 +227,7 @@ class ViewController: UIViewController {
             removeButtonBlock()
             displayPackageScreen()
         } else if counter == 5 {
+            displayEstimateScreen()
             estimateCost()
         }
 
@@ -279,6 +288,21 @@ class ViewController: UIViewController {
             recPackage = "FISMA Moderate"
             accessFee = fismaModerateFee
         }
+        
+        // switch to bundle pricing
+        if numberOfSystems == 5 && accessFee == fismaLowFee {
+            accessFee = bundle5FismaLow
+        } else if numberOfSystems == 10 && accessFee == fismaLowFee {
+            accessFee = bundle10FismaLow
+        } else if numberOfSystems == 15 && accessFee == fismaLowFee {
+            accessFee = bundle15FismaLow
+        } else if numberOfSystems == 5 && accessFee == fismaModerateFee {
+            accessFee = bundle5FismaModerate
+        } else if numberOfSystems == 10 && accessFee == fismaModerateFee {
+            accessFee = bundle10FismaModerate
+        } else if numberOfSystems == 15 && accessFee == fismaModerateFee {
+            accessFee = bundle15FismaModerate
+        }
 
         promptLabel.text = "Great! A \(recPackage) package is the best fit based on your needs."
         setUpButton(buttonName: "Show estimate")
@@ -286,23 +310,149 @@ class ViewController: UIViewController {
         
     }
     
-    func estimateCost() {
+    func displayEstimateScreen() {
         
-        print ("Estimated monthly cost for \(Int(numberOfSystems)) \(recPackage) system(s) with \(memoryQuotaText) memory is \((accessFee * numberOfSystems) + (memoryQuota * memoryUsageCost) )")
+        // set up screen title
+        promptLabel.removeFromSuperview()
+        let titleLabel = UILabel()
+        titleLabel.frame = CGRect(x:20,y:0,width:self.view.frame.size.width - 40,height: 100)
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 24)
+        titleLabel.textColor = UIColor(
+            red: 0x42/255,
+            green: 0x57/255,
+            blue: 0x72/255,
+            alpha: 1.0)
+        titleLabel.backgroundColor = UIColor.white.withAlphaComponent(0.0)
+        titleLabel.text = "Estimate"
+        self.view.addSubview(titleLabel)
         
-        // prices
-//        var recPackage : String = ""
-//        var accessFee : NSDecimalNumber = 0
-//        var estimatedCost : NSDecimalNumber = 0
-//        let prototypingFee : NSDecimalNumber = 1250.00
-//        let fismaLowFee : NSDecimalNumber = 1666.67
-//        let fismaModerateFee : NSDecimalNumber = 7500.00
-//        let memoryUsageCost : NSDecimalNumber = 105.00
+        // set up background
+        bgContainer.removeFromSuperview()
+        view.backgroundColor = UIColor(
+            red: 0xf1/255,
+            green: 0xf6/255,
+            blue: 0xfc/255,
+            alpha: 1.0)
         
+        // set up buttons
+        button?.removeFromSuperview()
+        setUpButton(buttonName: "Start again")
+        // #e6e5e3
+        button?.backgroundColor = UIColor(
+            red: 0xff/255,
+            green: 0xff/255,
+            blue: 0xff/255,
+            alpha: 1.0)
+        button?.setTitleColor(UIColor(
+            red: 0xe6/255,
+            green: 0xe5/255,
+            blue: 0xe3/255,
+            alpha: 1.0), for: .normal)
+        
+        
+        // set up labels
+        setUpEstimatorLabel(labelName: "Package", xPos: 20, yPos: 100)
+        setUpEstimatorLabel(labelName: "Quantity", xPos: 20, yPos: 200)
+        setUpEstimatorLabel(labelName: "Add memory usage quota \n$105 / GB per month", xPos: 20, yPos: 280)
+        setUpEstimatorLabel(labelName: "Total", xPos: 20, yPos: 420)
+        
+        setUpEstimateResults(labelName: recPackage, xPos: 20, yPos: 112)
+        setUpEstimateResults(labelName: String(numberOfSystems), xPos: 20, yPos: 212)
+        setUpEstimateResults(labelName: String(memoryQuotaText), xPos: 20, yPos: 292)
+        
+        if numberOfSystems < 5 {
+            setUpEstimatorLabel(labelName: "Cost/month", xPos: 250, yPos: 100)
+            setUpEstimateResults(labelName: String(accessFee), xPos: 250, yPos: 112)
+        } else {
+            setUpEstimatorLabel(labelName: "Discounted bulk price", xPos: 250, yPos: 200)
+            setUpEstimateResults(labelName: String(accessFee), xPos: 250, yPos: 212)
+        }
+
+        setUpEstimateResults(labelName: "\(recPackage),\n\(numberOfSystems) systems,\n\(memoryQuotaText) memory quota", xPos: 20, yPos: 432)
+        
+        estimateCost()
+        setUpEstimateResults(labelName: String(estimatedCost), xPos: 250, yPos: 432)
         
         
     }
     
+    func estimateCost() {
+        
+        if numberOfSystems == 1 {
+            
+            print ("Estimated monthly cost for 1 \(recPackage) system with \(memoryQuotaText) memory is \((accessFee) + (memoryQuota * memoryUsageCost) )")
+            
+            estimatedCost = ((accessFee) + (memoryQuota * memoryUsageCost) )
+
+        } else if numberOfSystems > 1 && numberOfSystems < 5 {
+            
+            print ("Estimated monthly cost for \(Int(numberOfSystems)) \(recPackage) systems with \(memoryQuotaText) memory quota is \((accessFee * numberOfSystems) + (memoryQuota * memoryUsageCost) )")
+            print ("Estimated cost for one year is \((accessFee * numberOfSystems) + (memoryQuota * memoryUsageCost) * 12 )")
+
+            estimatedCost = ((accessFee * numberOfSystems) + (memoryQuota * memoryUsageCost))
+
+        } else if numberOfSystems == 5 && recPackage == "FISMA Low" {
+            
+            print ("Estimated monthly cost for 5 \(recPackage) systems with \(memoryQuotaText) memory quota is \(bundle5FismaLow + (memoryQuota * memoryUsageCost))")
+            
+            estimatedCost = (bundle5FismaLow + (memoryQuota * memoryUsageCost))
+            
+        } else if numberOfSystems == 5 && recPackage == "FISMA Moderate" {
+            
+            print ("Estimated monthly cost for 5 \(recPackage) systems with \(memoryQuotaText) memory quota is \(bundle5FismaModerate + (memoryQuota * memoryUsageCost))")
+
+            estimatedCost = (bundle5FismaModerate + (memoryQuota * memoryUsageCost))
+            
+        } else if numberOfSystems == 10 && recPackage == "FISMA Low" {
+            
+            print ("Estimated monthly cost for 10 \(recPackage) systems with \(memoryQuotaText) memory quota is \(bundle10FismaLow + (memoryQuota * memoryUsageCost))")
+            
+            estimatedCost = (bundle10FismaLow + (memoryQuota * memoryUsageCost))
+            
+        } else if numberOfSystems == 10 && recPackage == "FISMA Moderate" {
+            
+            print ("Estimated monthly cost for 10 \(recPackage) systems with \(memoryQuotaText) memory quota is \(bundle10FismaModerate + (memoryQuota * memoryUsageCost))")
+            
+            estimatedCost = (bundle10FismaModerate + (memoryQuota * memoryUsageCost))
+
+        } else if numberOfSystems == 15 && recPackage == "FISMA Low" {
+           
+            print ("Estimated monthly cost for 15 \(recPackage) systems with \(memoryQuotaText) memory quota is \(bundle15FismaLow + (memoryQuota * memoryUsageCost))")
+            
+            estimatedCost = (bundle15FismaLow + (memoryQuota * memoryUsageCost))
+            
+        } else if numberOfSystems == 15 && recPackage == "FISMA Moderate" {
+            
+            print ("Estimated monthly cost for 15 \(recPackage) systems with \(memoryQuotaText) memory quota is \(bundle15FismaModerate + (memoryQuota * memoryUsageCost))")
+            
+            estimatedCost = (bundle15FismaModerate + (memoryQuota * memoryUsageCost))
+
+        }
+        print ("Estimated cost: \(estimatedCost)")
+    }
+    
+    func setUpEstimatorLabel(labelName : String, xPos : Int, yPos : Int) {
+    
+        // init
+        let label = UILabel.init()
+        label.frame = CGRect(x:(xPos),y:(yPos),width:150,height: 36)
+        label.text = labelName
+        label.numberOfLines = 2
+        label.font = UIFont.systemFont(ofSize: 11)
+        label.textColor = UIColor.black
+        self.view.addSubview(label)
+        
+    }
+    
+    func setUpEstimateResults(labelName : String, xPos : Int, yPos : Int){
+        let label = UILabel.init()
+        label.frame = CGRect(x:(xPos),y:(yPos),width:150,height: 60)
+        label.text = labelName
+        label.numberOfLines = 3
+        label.font = UIFont.boldSystemFont(ofSize: 16)
+        label.textColor = UIColor.black
+        self.view.addSubview(label)
+    }
     
 }
 
