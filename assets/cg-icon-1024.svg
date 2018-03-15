@@ -1,1 +1,11 @@
-<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 769.04 1002.94"><defs><style>.cls-1{fill:#3498db;}.cls-2{fill:#1f2b38;}</style></defs><title>cg-icon-1024</title><polygon class="cls-1" points="327.66 400.06 384.38 225.47 441.11 400.06 614.57 400.06 769.04 279.64 384.52 0 0 279.64 154.32 400.06 327.66 400.06"/><polygon class="cls-2" points="476.17 507.96 532.9 682.55 384.38 574.65 235.87 682.55 292.6 507.96 0 279.64 0 723.64 384.52 1002.94 769.04 723.64 769.04 279.64 476.17 507.96"/></svg>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="100px" height="100px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">
+<title>cg-icon-1024</title>
+<polygon fill="#3498DB" points="44.331,39.889 49.986,22.481 55.643,39.889 72.938,39.889 88.34,27.882 50,0 11.661,27.882 
+	27.047,39.889 "/>
+<polygon fill="#1F2B38" points="59.139,50.646 64.795,68.055 49.986,57.297 35.179,68.055 40.835,50.646 11.661,27.882 
+	11.661,72.152 50,100 88.34,72.152 88.34,27.882 "/>
+</svg>
