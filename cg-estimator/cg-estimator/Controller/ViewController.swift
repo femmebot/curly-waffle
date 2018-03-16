@@ -14,7 +14,7 @@ class ViewController: UIViewController {
     var button : UIButton?
     var buttons = [UIButton?]()
     var label : UILabel?
-
+    
     var allPrompts = PromptData()
     var promptLabel = UITextView.init()
     var bgContainer = UIView.init()
@@ -278,14 +278,19 @@ class ViewController: UIViewController {
     
     func displayPackageScreen() {
         
+        var imageName = ""
+        
         if prodVar == false {
             recPackage = "Prototyping"
+            imageName = "pricing-prototype"
             accessFee = prototypingFee
         } else if prodVar == true && fisma == "Low" {
             recPackage = "FISMA Low"
+            imageName = "pricing-fisma"
             accessFee = fismaLowFee
         } else if prodVar == true && fisma == "Moderate" {
             recPackage = "FISMA Moderate"
+            imageName = "pricing-fisma"
             accessFee = fismaModerateFee
         }
         
@@ -303,7 +308,12 @@ class ViewController: UIViewController {
         } else if numberOfSystems == 15 && accessFee == fismaModerateFee {
             accessFee = bundle15FismaModerate
         }
-
+        
+        let image = UIImage(named: imageName)
+        let imageView = UIImageView(image: image!)
+        imageView.frame = CGRect(x: (self.view.frame.size.width/2 - 80), y: (self.view.frame.size.height/2 - 80), width: 160, height: 160)
+        view.addSubview(imageView)
+        
         promptLabel.text = "Great! A \(recPackage) package is the best fit based on your needs."
         setUpButton(buttonName: "Show estimate")
         counter = 5
